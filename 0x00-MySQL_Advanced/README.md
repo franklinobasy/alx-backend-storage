@@ -123,3 +123,45 @@ bob@dylan:~$
 ```
 
 solution - [0-uniq_users.sql](./0-uniq_users.sql)
+
+### 1. In and not out
+
+Write a SQL script that creates a table `users` following these requirements:
+
+- With these attributes:
+  - `id`, integer, never null, auto increment and primary key
+  - `email`, string (255 characters), never null and unique
+  - `name`, string (255 characters)
+  - `country`, enumeration of countries: `US`, `CO` and `TN`, never null (= default will be the first element of the enumeration, here `US`)
+- If the table already exists, your script should not fail
+- Your script can be executed on any database
+
+```shell
+bob@dylan:~$ echo "SELECT * FROM users;" | mysql -uroot -p holberton
+Enter password: 
+ERROR 1146 (42S02) at line 1: Table 'holberton.users' doesn't exist
+bob@dylan:~$ 
+bob@dylan:~$ cat 1-country_users.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ echo 'INSERT INTO users (email, name, country) VALUES ("bob@dylan.com", "Bob", "US");' | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ echo 'INSERT INTO users (email, name, country) VALUES ("sylvie@dylan.com", "Sylvie", "CO");' | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ echo 'INSERT INTO users (email, name, country) VALUES ("jean@dylan.com", "Jean", "FR");' | mysql -uroot -p holberton
+Enter password: 
+ERROR 1265 (01000) at line 1: Data truncated for column 'country' at row 1
+bob@dylan:~$ 
+bob@dylan:~$ echo 'INSERT INTO users (email, name) VALUES ("john@dylan.com", "John");' | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ echo "SELECT * FROM users;" | mysql -uroot -p holberton
+Enter password: 
+id  email   name    country
+1   bob@dylan.com   Bob US
+2   sylvie@dylan.com    Sylvie  CO
+3   john@dylan.com  John    US
+bob@dylan:~$
+```
+
+solution - [1-country_users.sql](./1-country_users.sql)
