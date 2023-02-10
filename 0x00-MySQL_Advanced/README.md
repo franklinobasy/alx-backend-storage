@@ -760,3 +760,109 @@ bob@dylan:~$
 ```
 
 solution - [10-div.sql](./10-div.sql)
+
+### 11. No table for a meeting
+
+Write a SQL script that creates a view `need_meeting` that lists all students that have a score under 80 (strict) and no `last_meeting` or more than 1 month.
+
+**Requirements:**
+
+- The view `need_meeting` should return all students name when:
+  - They score are under (strict) to 80
+  - **AND** no `last_meeting` date **OR** more than a month
+
+```shell
+bob@dylan:~$ cat 11-init.sql
+-- Initial
+DROP TABLE IF EXISTS students;
+
+CREATE TABLE IF NOT EXISTS students (
+    name VARCHAR(255) NOT NULL,
+    score INT default 0,
+    last_meeting DATE NULL 
+);
+
+INSERT INTO students (name, score) VALUES ("Bob", 80);
+INSERT INTO students (name, score) VALUES ("Sylvia", 120);
+INSERT INTO students (name, score) VALUES ("Jean", 60);
+INSERT INTO students (name, score) VALUES ("Steeve", 50);
+INSERT INTO students (name, score) VALUES ("Camilia", 80);
+INSERT INTO students (name, score) VALUES ("Alexa", 130);
+
+bob@dylan:~$ cat 11-init.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-need_meeting.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-main.sql
+-- Test view
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET score = 40 WHERE name = 'Bob';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET score = 80 WHERE name = 'Steeve';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET last_meeting = CURDATE() WHERE name = 'Jean';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+UPDATE students SET last_meeting = ADDDATE(CURDATE(), INTERVAL -2 MONTH) WHERE name = 'Jean';
+SELECT * FROM need_meeting;
+
+SELECT "--";
+
+SHOW CREATE TABLE need_meeting;
+
+SELECT "--";
+
+SHOW CREATE TABLE students;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 11-main.sql | mysql -uroot -p holberton
+Enter password: 
+name
+Jean
+Steeve
+--
+--
+name
+Bob
+Jean
+Steeve
+--
+--
+name
+Bob
+Jean
+--
+--
+name
+Bob
+--
+--
+name
+Bob
+Jean
+--
+--
+View    Create View character_set_client    collation_connection
+XXXXXX<yes, here it will display the View SQL statement :-) >XXXXXX
+--
+--
+Table   Create Table
+students    CREATE TABLE `students` (\n  `name` varchar(255) NOT NULL,\n  `score` int(11) DEFAULT '0',\n  `last_meeting` date DEFAULT NULL\n) ENGINE=InnoDB DEFAULT CHARSET=latin1
+bob@dylan:~$
+```
+
+solution - [11-need_meeting.sql](./11-need_meeting.sql)
+
