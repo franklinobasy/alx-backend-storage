@@ -591,3 +591,58 @@ bob@dylan:~$
 ```
 
 solution - [7-average_score.sql](./7-average_score.sql)
+
+### 8. Optimize simple search
+
+Write a SQL script that creates an index `idx_name_first` on the table `names` and the first letter of `name`.
+
+**Requirements:**
+
+- Import this table dump: [names.sql.zip](https://intranet.alxswe.com/rltoken/BluyCCIIfw0NqcjqUiUdEw)
+- Only the first letter of name must be indexed
+
+**Context:** *Index is not the solution for any performance issue, but well used, it’s really powerful!*
+
+```shell
+bob@dylan:~$ cat names.sql | mysql -uroot -p holberton
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ mysql -uroot -p holberton
+Enter password: 
+mysql> SELECT COUNT(name) FROM names WHERE name LIKE 'a%';
++-------------+
+| COUNT(name) |
++-------------+
+|      302936 |
++-------------+
+1 row in set (2.19 sec)
+mysql> 
+mysql> exit
+bye
+bob@dylan:~$ 
+bob@dylan:~$ cat 8-index_my_names.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ mysql -uroot -p holberton
+Enter password: 
+mysql> SHOW index FROM names;
++-------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table | Non_unique | Key_name       | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| names |          1 | idx_name_first |            1 | name        | A         |          25 |        1 | NULL   | YES  | BTREE      |         |               |
++-------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+1 row in set (0.00 sec)
+mysql> 
+mysql> SELECT COUNT(name) FROM names WHERE name LIKE 'a%';
++-------------+
+| COUNT(name) |
++-------------+
+|      302936 |
++-------------+
+1 row in set (0.82 sec)
+mysql> 
+mysql> exit
+bye
+bob@dylan:~$
+```
+solution - [8-index_my_names.sql](./8-index_my_names.sql)
