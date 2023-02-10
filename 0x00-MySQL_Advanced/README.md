@@ -369,3 +369,127 @@ bob@dylan:~$
 ```
 
 solution - [5-valid_email.sql](./5-valid_email.sql)
+
+### 6. Add bonus
+
+Write a SQL script that creates a stored procedure `AddBonus` that adds a new correction for a student.
+
+**Requirements:**
+
+- Procedure `AddBonus` is taking 3 inputs (in this order):
+  - `user_id`, a `users.id` value (you can assume `user_id` is linked to an existing `users`)
+  - `project_name`, a new or already exists `projects` - if no `projects.name` found in the table, you should create it
+  - `score`, the score value for the correction
+
+**Context:** *Write code in SQL is a nice level up!*
+
+```shell
+bob@dylan:~$ cat 6-init.sql
+-- Initial
+DROP TABLE IF EXISTS corrections;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS projects;
+
+CREATE TABLE IF NOT EXISTS users (
+    id int not null AUTO_INCREMENT,
+    name varchar(255) not null,
+    average_score float default 0,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id int not null AUTO_INCREMENT,
+    name varchar(255) not null,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS corrections (
+    user_id int not null,
+    project_id int not null,
+    score int default 0,
+    KEY `user_id` (`user_id`),
+    KEY `project_id` (`project_id`),
+    CONSTRAINT fk_user_id FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT fk_project_id FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
+);
+
+INSERT INTO users (name) VALUES ("Bob");
+SET @user_bob = LAST_INSERT_ID();
+
+INSERT INTO users (name) VALUES ("Jeanne");
+SET @user_jeanne = LAST_INSERT_ID();
+
+INSERT INTO projects (name) VALUES ("C is fun");
+SET @project_c = LAST_INSERT_ID();
+
+INSERT INTO projects (name) VALUES ("Python is cool");
+SET @project_py = LAST_INSERT_ID();
+
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_c, 80);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_py, 96);
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_c, 91);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_py, 73);
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 6-init.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 6-bonus.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 6-main.sql
+Enter password: 
+-- Show and add bonus correction
+SELECT * FROM projects;
+SELECT * FROM corrections;
+
+SELECT "--";
+
+CALL AddBonus((SELECT id FROM users WHERE name = "Jeanne"), "Python is cool", 100);
+
+CALL AddBonus((SELECT id FROM users WHERE name = "Jeanne"), "Bonus project", 100);
+CALL AddBonus((SELECT id FROM users WHERE name = "Bob"), "Bonus project", 10);
+
+CALL AddBonus((SELECT id FROM users WHERE name = "Jeanne"), "New bonus", 90);
+
+SELECT "--";
+
+SELECT * FROM projects;
+SELECT * FROM corrections;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 6-main.sql | mysql -uroot -p holberton 
+Enter password: 
+id  name
+1   C is fun
+2   Python is cool
+user_id project_id  score
+1   1   80
+1   2   96
+2   1   91
+2   2   73
+--
+--
+--
+--
+id  name
+1   C is fun
+2   Python is cool
+3   Bonus project
+4   New bonus
+user_id project_id  score
+1   1   80
+1   2   96
+2   1   91
+2   2   73
+2   2   100
+2   3   100
+1   3   10
+2   4   90
+bob@dylan:~$
+```
+
+solution - [6-bonus.sql](./6-bonus.sql)
+
