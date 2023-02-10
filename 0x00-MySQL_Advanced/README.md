@@ -866,3 +866,107 @@ bob@dylan:~$
 
 solution - [11-need_meeting.sql](./11-need_meeting.sql)
 
+### 12. Average weighted score
+
+Write a SQL script that creates a stored procedure `ComputeAverageWeightedScoreForUser` that computes and store the average weighted score for a student.
+
+**Requirements:**
+
+- Procedure `ComputeAverageScoreForUser` is taking 1 input:
+  - `user_id`, a `users.id` value (you can assume `user_id` is linked to an existing `users`)
+
+**Tips:**
+
+- [Calculate-Weighted-Average](https://intranet.alxswe.com/rltoken/QHx92mlF43zF6GTEil-Cyw)
+
+```shell
+bob@dylan:~$ cat 100-init.sql
+-- Initial
+DROP TABLE IF EXISTS corrections;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS projects;
+
+CREATE TABLE IF NOT EXISTS users (
+    id int not null AUTO_INCREMENT,
+    name varchar(255) not null,
+    average_score float default 0,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id int not null AUTO_INCREMENT,
+    name varchar(255) not null,
+    weight int default 1,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS corrections (
+    user_id int not null,
+    project_id int not null,
+    score float default 0,
+    KEY `user_id` (`user_id`),
+    KEY `project_id` (`project_id`),
+    CONSTRAINT fk_user_id FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT fk_project_id FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
+);
+
+INSERT INTO users (name) VALUES ("Bob");
+SET @user_bob = LAST_INSERT_ID();
+
+INSERT INTO users (name) VALUES ("Jeanne");
+SET @user_jeanne = LAST_INSERT_ID();
+
+INSERT INTO projects (name, weight) VALUES ("C is fun", 1);
+SET @project_c = LAST_INSERT_ID();
+
+INSERT INTO projects (name, weight) VALUES ("Python is cool", 2);
+SET @project_py = LAST_INSERT_ID();
+
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_c, 80);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_py, 96);
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_c, 91);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_py, 73);
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 100-init.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 100-average_weighted_score.sql | mysql -uroot -p holberton 
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ cat 100-main.sql
+-- Show and compute average weighted score
+SELECT * FROM users;
+SELECT * FROM projects;
+SELECT * FROM corrections;
+
+CALL ComputeAverageWeightedScoreForUser((SELECT id FROM users WHERE name = "Jeanne"));
+
+SELECT "--";
+SELECT * FROM users;
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 100-main.sql | mysql -uroot -p holberton 
+Enter password: 
+id  name    average_score
+1   Bob 0
+2   Jeanne  82
+id  name    weight
+1   C is fun    1
+2   Python is cool  2
+user_id project_id  score
+1   1   80
+1   2   96
+2   1   91
+2   2   73
+--
+--
+id  name    average_score
+1   Bob 0
+2   Jeanne  79
+bob@dylan:~$
+```
+
+solution - [100-average_weighted_score.sql](./100-average_weighted_score.sql)
