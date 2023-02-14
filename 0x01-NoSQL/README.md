@@ -592,3 +592,50 @@ guillaume@ubuntu:~/0x01$ ./10-main.py
 [5a8f60cfd4321e1403ba7ab9] Holberton school ['iOS']
 guillaume@ubuntu:~/0x01$
 ```
+
+solution - [10-update_topics.py](./10-update_topics.py)
+
+### 11. Where can I learn Python?
+
+Write a Python function that returns the list of school having a specific topic:
+
+- Prototype: `def schools_by_topic(mongo_collection, topic):`
+- `mongo_collection` will be the `pymongo` collection object
+- `topic` (string) will be topic searched
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 11-main.py
+#!/usr/bin/env python3
+""" 11-main """
+from pymongo import MongoClient
+list_all = __import__('8-all').list_all
+insert_school = __import__('9-insert_school').insert_school
+schools_by_topic = __import__('11-schools_by_topic').schools_by_topic
+
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    school_collection = client.my_db.school
+
+    j_schools = [
+        { 'name': "Holberton school", 'topics': ["Algo", "C", "Python", "React"]},
+        { 'name': "UCSF", 'topics': ["Algo", "MongoDB"]},
+        { 'name': "UCLA", 'topics': ["C", "Python"]},
+        { 'name': "UCSD", 'topics': ["Cassandra"]},
+        { 'name': "Stanford", 'topics': ["C", "React", "Javascript"]}
+    ]
+    for j_school in j_schools:
+        insert_school(school_collection, **j_school)
+
+    schools = schools_by_topic(school_collection, "Python")
+    for school in schools:
+        print("[{}] {} {}".format(school.get('_id'), school.get('name'), school.get('topics', "")))
+
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./11-main.py
+[5a90731fd4321e1e5a3f53e3] Holberton school ['Algo', 'C', 'Python', 'React']
+[5a90731fd4321e1e5a3f53e5] UCLA ['C', 'Python']
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [11-schools_by_topic.py](./11-schools_by_topic.py)
+
