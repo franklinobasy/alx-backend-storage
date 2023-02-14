@@ -481,3 +481,34 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [6-update](./6-update)
+
+### 8. List all documents in Python
+
+Write a Python function that lists all documents in a collection:
+
+- Prototype: `def list_all(mongo_collection):`
+- Return an empty list if no document in the collection
+- `mongo_collection` will be the `pymongo` collection object
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 8-main.py
+#!/usr/bin/env python3
+""" 8-main """
+from pymongo import MongoClient
+list_all = __import__('8-all').list_all
+
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    school_collection = client.my_db.school
+    schools = list_all(school_collection)
+    for school in schools:
+        print("[{}] {}".format(school.get('_id'), school.get('name')))
+
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./8-main.py
+[5a8f60cfd4321e1403ba7ab9] Holberton school
+[5a8f60cfd4321e1403ba7aba] UCSD
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [8-all.py](.//8-all.py)
