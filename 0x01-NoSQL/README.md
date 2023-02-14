@@ -454,3 +454,30 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [5-count](./5-count)
+
+### 6. Update
+
+Write a script that adds a new attribute to a document in the collection `school`:
+
+- The script should update only document with n`ame="Holberton school"` (all of them)
+- The update should add the attribute `address` with the value “972 Mission street”
+- The database name will be passed as option of `mongo` command
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 6-update | mongo my_db
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017/my_db
+MongoDB server version: 3.6.3
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+bye
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ cat 4-match | mongo my_db
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017/my_db
+MongoDB server version: 3.6.3
+{ "_id" : ObjectId("5a8fad532b69437b63252406"), "name" : "Holberton school", "address" : "972 Mission street" }
+bye
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [6-update](./6-update)
