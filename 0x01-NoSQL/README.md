@@ -355,3 +355,29 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [0-list_databases](./0-list_databases)
+
+### 1. Create a database
+
+Write a script that creates or uses the database `my_db`:
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 0-list_databases | mongo
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.3
+admin        0.000GB
+config       0.000GB
+local        0.000GB
+logs         0.005GB
+bye
+guillaume@ubuntu:~/0x01$
+guillaume@ubuntu:~/0x01$ cat 1-use_or_create_database | mongo
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.6.3
+switched to db my_db
+bye
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [1-use_or_create_database](./1-use_or_create_database)
