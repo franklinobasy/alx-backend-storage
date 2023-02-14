@@ -381,3 +381,22 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [1-use_or_create_database](./1-use_or_create_database)
+
+### 2. Insert document
+
+Write a script that inserts a document in the collection `school`:
+
+- The document must have one attribute `name` with value “Holberton school”
+- The database name will be passed as option of `mongo` command
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 2-insert | mongo my_db
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017/my_db
+MongoDB server version: 3.6.3
+WriteResult({ "nInserted" : 1 })
+bye
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [2-insert](./2-insert)
