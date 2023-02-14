@@ -400,3 +400,21 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [2-insert](./2-insert)
+
+### 3. All documents
+
+Write a script that lists all documents in the collection `school`:
+
+- The database name will be passed as option of `mongo` command
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 3-all | mongo my_db
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27017/my_db
+MongoDB server version: 3.6.3
+{ "_id" : ObjectId("5a8fad532b69437b63252406"), "name" : "Holberton school" }
+bye
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [3-all](./3-all)
