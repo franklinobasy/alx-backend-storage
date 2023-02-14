@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''Task 11's module.
+'''Task 11: Where can I learn Python?
 '''
 
 
