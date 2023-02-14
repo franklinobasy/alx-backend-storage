@@ -549,3 +549,46 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [9-insert_school.py](./9-insert_school.py)
+
+### 10. Change school topics
+
+Write a Python function that changes all topics of a school document based on the name:
+
+- Prototype: `def update_topics(mongo_collection, name, topics):`
+- `mongo_collection` will be the `pymongo` collection object
+- `name` (string) will be the school name to update
+- `topics` (list of strings) will be the list of topics approached in the school
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 10-main.py
+#!/usr/bin/env python3
+""" 10-main """
+from pymongo import MongoClient
+list_all = __import__('8-all').list_all
+update_topics = __import__('10-update_topics').update_topics
+
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    school_collection = client.my_db.school
+    update_topics(school_collection, "Holberton school", ["Sys admin", "AI", "Algorithm"])
+
+    schools = list_all(school_collection)
+    for school in schools:
+        print("[{}] {} {}".format(school.get('_id'), school.get('name'), school.get('topics', "")))
+
+    update_topics(school_collection, "Holberton school", ["iOS"])
+
+    schools = list_all(school_collection)
+    for school in schools:
+        print("[{}] {} {}".format(school.get('_id'), school.get('name'), school.get('topics', "")))
+
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./10-main.py
+[5a8f60cfd4321e1403ba7abb] UCSF 
+[5a8f60cfd4321e1403ba7aba] UCSD 
+[5a8f60cfd4321e1403ba7ab9] Holberton school ['Sys admin', 'AI', 'Algorithm']
+[5a8f60cfd4321e1403ba7abb] UCSF 
+[5a8f60cfd4321e1403ba7aba] UCSD 
+[5a8f60cfd4321e1403ba7ab9] Holberton school ['iOS']
+guillaume@ubuntu:~/0x01$
+```
