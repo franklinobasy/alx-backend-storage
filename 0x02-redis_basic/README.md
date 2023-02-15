@@ -103,3 +103,45 @@ for value, fn in TEST_CASES.items():
 ```
 
 solution - [exercise.py](./exercise.py)
+
+### 2. Incrementing values
+
+Familiarize yourself with the `INCR` command and its python equivalent.
+
+In this task, we will implement a system to count how many times methods of the `Cache` class are called.
+
+Above `Cache` define a `count_calls` decorator that takes a single `method Callable` argument and returns a `Callable`.
+
+As a key, use the qualified name of `method` using the __qualname__ dunder method.
+
+Create and return function that increments the count for that key every time the method is called and returns the value returned by the original method.
+
+Remember that the first argument of the wrapped function will be `self` which is the instance itself, which lets you access the Redis instance.
+
+Protip: when defining a decorator it is useful to use `functool.wraps` to conserve the original function’s name, docstring, etc. Make sure you use it as described here.
+
+Decorate `Cache.store` with `count_calls`.
+
+```txt
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+""" Main file """
+
+Cache = __import__('exercise').Cache
+
+cache = Cache()
+
+cache.store(b"first")
+print(cache.get(cache.store.__qualname__))
+
+cache.store(b"second")
+cache.store(b"third")
+print(cache.get(cache.store.__qualname__))
+
+bob@dylan:~$ ./main.py
+b'1'
+b'3'
+bob@dylan:~$
+```
+
+solution - [exercise.py](./exercise.py)
