@@ -718,3 +718,60 @@ guillaume@ubuntu:~/0x01$
 ```
 
 solution - [100-find](./100-find)
+
+### 14. Top students
+#advanced
+Write a Python function that returns all students sorted by average score:
+
+- Prototype: `def top_students(mongo_collection):`
+- `mongo_collection` will be the `pymongo` collection object
+- The top must be ordered
+- The average score must be part of each item returns with key = `averageScore`
+
+```txt
+guillaume@ubuntu:~/0x01$ cat 101-main.py
+#!/usr/bin/env python3
+""" 101-main """
+from pymongo import MongoClient
+list_all = __import__('8-all').list_all
+insert_school = __import__('9-insert_school').insert_school
+top_students = __import__('101-students').top_students
+
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    students_collection = client.my_db.students
+
+    j_students = [
+        { 'name': "John", 'topics': [{ 'title': "Algo", 'score': 10.3 },{ 'title': "C", 'score': 6.2 }, { 'title': "Python", 'score': 12.1 }]},
+        { 'name': "Bob", 'topics': [{ 'title': "Algo", 'score': 5.4 },{ 'title': "C", 'score': 4.9 }, { 'title': "Python", 'score': 7.9 }]},
+        { 'name': "Sonia", 'topics': [{ 'title': "Algo", 'score': 14.8 },{ 'title': "C", 'score': 8.8 }, { 'title': "Python", 'score': 15.7 }]},
+        { 'name': "Amy", 'topics': [{ 'title': "Algo", 'score': 9.1 },{ 'title': "C", 'score': 14.2 }, { 'title': "Python", 'score': 4.8 }]},
+        { 'name': "Julia", 'topics': [{ 'title': "Algo", 'score': 10.5 },{ 'title': "C", 'score': 10.2 }, { 'title': "Python", 'score': 10.1 }]}
+    ]
+    for j_student in j_students:
+        insert_school(students_collection, **j_student)
+
+    students = list_all(students_collection)
+    for student in students:
+        print("[{}] {} - {}".format(student.get('_id'), student.get('name'), student.get('topics')))
+
+    top_students = top_students(students_collection)
+    for student in top_students:
+        print("[{}] {} => {}".format(student.get('_id'), student.get('name'), student.get('averageScore')))
+
+guillaume@ubuntu:~/0x01$ 
+guillaume@ubuntu:~/0x01$ ./101-main.py
+[5a90776bd4321e1ec94fc408] John - [{'title': 'Algo', 'score': 10.3}, {'title': 'C', 'score': 6.2}, {'title': 'Python', 'score': 12.1}]
+[5a90776bd4321e1ec94fc409] Bob - [{'title': 'Algo', 'score': 5.4}, {'title': 'C', 'score': 4.9}, {'title': 'Python', 'score': 7.9}]
+[5a90776bd4321e1ec94fc40a] Sonia - [{'title': 'Algo', 'score': 14.8}, {'title': 'C', 'score': 8.8}, {'title': 'Python', 'score': 15.7}]
+[5a90776bd4321e1ec94fc40b] Amy - [{'title': 'Algo', 'score': 9.1}, {'title': 'C', 'score': 14.2}, {'title': 'Python', 'score': 4.8}]
+[5a90776bd4321e1ec94fc40c] Julia - [{'title': 'Algo', 'score': 10.5}, {'title': 'C', 'score': 10.2}, {'title': 'Python', 'score': 10.1}]
+[5a90776bd4321e1ec94fc40a] Sonia => 13.1
+[5a90776bd4321e1ec94fc40c] Julia => 10.266666666666666
+[5a90776bd4321e1ec94fc408] John => 9.533333333333333
+[5a90776bd4321e1ec94fc40b] Amy => 9.366666666666665
+[5a90776bd4321e1ec94fc409] Bob => 6.066666666666667
+guillaume@ubuntu:~/0x01$
+```
+
+solution - [101-students.py](./101-students.py)
